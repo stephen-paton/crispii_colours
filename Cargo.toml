@@ -1,6 +1,6 @@
 [package]
 name = "crispii_colours"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Simple, safe, no frills, colour struct (a low level dependency of the crispii ecosystem)"
 authors = ["Stephen Paton <69050696+stephen-paton@users.noreply.github.com>"]
@@ -8,4 +8,4 @@ license = "MIT OR Apache-2.0"
 keywords = ["crispii", "colours", "structs"]
 
 [dependencies]
-crispii_digits = "0.1.1"
+crispii_digits = "0.1.0"
