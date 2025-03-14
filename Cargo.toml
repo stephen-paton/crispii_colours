@@ -8,4 +8,4 @@ license = "MIT OR Apache-2.0"
 keywords = ["crispii", "colours"]
 
 [dependencies]
-crispii_errors = "0.1.1"
+crispii_errors = { path = "../crispii_errors", version = "0.1.1" }

@@ -12,5 +12,3 @@ dependencies = [
 [[package]]
 name = "crispii_errors"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c95e8aee066401498ecf0cd5556534ee53e29d265304c3ecd1f5a2735b658f1"
