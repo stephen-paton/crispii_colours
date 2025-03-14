@@ -2,6 +2,7 @@
 name = "crispii_colours"
 version = "0.2.0"
 edition = "2024"
+rust-version = "1.85.0"
 description = "Colour types intended for use with Crispii"
 authors = ["Stephen Paton <69050696+stephen-paton@users.noreply.github.com>"]
 license = "MIT OR Apache-2.0"
