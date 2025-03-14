@@ -4,13 +4,13 @@ version = 4
 
 [[package]]
 name = "crispii_colours"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
- "crispii_digits",
+ "crispii_errors",
 ]
 
 [[package]]
-name = "crispii_digits"
-version = "0.1.0"
+name = "crispii_errors"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a03511ab8a3d28e658cefb8a74942234ffeaaaa2282bb08c14864bf29cbddc5"
+checksum = "7c95e8aee066401498ecf0cd5556534ee53e29d265304c3ecd1f5a2735b658f1"

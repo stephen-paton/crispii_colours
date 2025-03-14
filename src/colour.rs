@@ -1,19 +1,20 @@
-mod channel_intensity;
-pub use channel_intensity::ChannelIntensity;
+pub mod colour_channel_intensity;
+pub use colour_channel_intensity::ColourChannelIntensity;
 
-pub use crispii_digits::Hex;
+pub mod opacity_channel_intensity;
+pub use opacity_channel_intensity::OpacityChannelIntensity;
 
 /// A struct representing an RGBA colour
 #[derive(Clone, Copy, Debug)]
 pub struct Colour {
-    r: ChannelIntensity,
-    g: ChannelIntensity,
-    b: ChannelIntensity,
-    a: ChannelIntensity,
+    r: ColourChannelIntensity,
+    g: ColourChannelIntensity,
+    b: ColourChannelIntensity,
+    a: OpacityChannelIntensity,
 }
 
 impl Colour {
-    pub fn rgba(r: ChannelIntensity, g: ChannelIntensity, b: ChannelIntensity, a: ChannelIntensity) -> Self {
+    pub fn rgba(r: ColourChannelIntensity, g: ColourChannelIntensity, b: ColourChannelIntensity, a: OpacityChannelIntensity) -> Self {
         Self {
             r,
             g,
@@ -22,22 +23,26 @@ impl Colour {
         }
     }
 
-    pub fn rgb(r: ChannelIntensity, g: ChannelIntensity, b: ChannelIntensity) -> Self {
+    pub fn rgb(r: ColourChannelIntensity, g: ColourChannelIntensity, b: ColourChannelIntensity) -> Self {
         Self {
             r,
             g,
             b,
-            a: ChannelIntensity::new(Hex::F, Hex::F),
+            a: OpacityChannelIntensity::new(100).expect("legal value"),
         }
     }
-}
 
-impl From<Colour> for u32 {
-    fn from(value: Colour) -> Self {
-        ((u8::from(value.r) as u32) << 24)
-        + ((u8::from(value.g) as u32) << 16)
-        + ((u8::from(value.b) as u32) << 8)
-        + (u8::from(value.a) as u32)
+    pub fn as_rgb_hex(&self) -> u32 {
+        ((self.r.get_intensity() as u32) << 16)
+        + ((self.g.get_intensity() as u32) << 8)
+        + (self.b.get_intensity() as u32)
+    }
+
+    pub fn as_rgba_hex(&self) -> u32 {
+        ((self.r.get_intensity() as u32) << 24)
+        + ((self.g.get_intensity() as u32) << 16)
+        + ((self.b.get_intensity() as u32) << 8)
+        + (((self.a.get_intensity() as f32) * 0.01 * (255 as f32)).floor() as u32)
     }
 }
 
@@ -46,63 +51,63 @@ mod tests {
     use super::*;
 
     #[test]
-    fn is_black() {
-        let result = u32::from(Colour::rgb(
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero)
-        ));
-        assert_eq!(result, 0x00_00_00_FF);
+    fn is_rgb_black() {
+        let result = Colour::rgb(
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00)
+        ).as_rgb_hex();
+        assert_eq!(result, 0x00_00_00);
     }
 
     #[test]
-    fn is_red() {
-        let result = u32::from(Colour::rgb(
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero)
-        ));
-        assert_eq!(result, 0xFF_00_00_FF);
+    fn is_rgb_red() {
+        let result = Colour::rgb(
+            ColourChannelIntensity::new(0xFF),
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00)
+        ).as_rgb_hex();
+        assert_eq!(result, 0xFF_00_00);
     }
 
     #[test]
-    fn is_green() {
-        let result = u32::from(Colour::rgb(
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero)
-        ));
-        assert_eq!(result, 0x00_FF_00_FF);
+    fn is_rgb_green() {
+        let result = Colour::rgb(
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0xFF),
+            ColourChannelIntensity::new(0x00)
+        ).as_rgb_hex();
+        assert_eq!(result, 0x00_FF_00);
     }
 
     #[test]
-    fn is_blue() {
-        let result = u32::from(Colour::rgb(
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero),
-            ChannelIntensity::new(Hex::F, Hex::F)
-        ));
-        assert_eq!(result, 0x00_00_FF_FF);
+    fn is_rgb_blue() {
+        let result = Colour::rgb(
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0xFF)
+        ).as_rgb_hex();
+        assert_eq!(result, 0x00_00_FF);
     }
 
     #[test]
-    fn is_white() {
-        let result = u32::from(Colour::rgb(
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::F, Hex::F)
-        ));
-        assert_eq!(result, 0xFF_FF_FF_FF);
+    fn is_rgb_white() {
+        let result = Colour::rgb(
+            ColourChannelIntensity::new(0xFF),
+            ColourChannelIntensity::new(0xFF),
+            ColourChannelIntensity::new(0xFF)
+        ).as_rgb_hex();
+        assert_eq!(result, 0xFF_FF_FF);
     }
 
     #[test]
-    fn is_white_and_invisible() {
-        let result = u32::from(Colour::rgba(
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::F, Hex::F),
-            ChannelIntensity::new(Hex::Zero, Hex::Zero)
-        ));
-        assert_eq!(result, 0xFF_FF_FF_00);
+    fn is_rgba_black_and_50_percent_opaque() {
+        let result = Colour::rgba(
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00),
+            ColourChannelIntensity::new(0x00),
+            OpacityChannelIntensity::new(50).expect("legal value")
+        ).as_rgba_hex();
+        assert_eq!(result, 0x00_00_00_7F);
     }
 }
