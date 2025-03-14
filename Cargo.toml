@@ -8,4 +8,4 @@ license = "MIT OR Apache-2.0"
 keywords = ["crispii", "colours", "structs"]
 
 [dependencies]
-crispii_digits = "0.1.0"
+crispii_digits = "0.1.1"
