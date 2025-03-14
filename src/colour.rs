@@ -4,6 +4,7 @@ pub use channel_intensity::ChannelIntensity;
 pub use crispii_digits::Hex;
 
 /// A struct representing an RGBA colour
+#[derive(Clone, Copy, Debug)]
 pub struct Colour {
     r: ChannelIntensity,
     g: ChannelIntensity,

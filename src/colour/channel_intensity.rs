@@ -1,6 +1,7 @@
 use crispii_digits::Hex;
 
 /// A struct representing the intensity of a colour channel (RGBA) as a two digit hex value - from 00 to FF (inclusive)
+#[derive(Clone, Copy, Debug)]
 pub struct ChannelIntensity {
     digit2: Hex,
     digit1: Hex,
