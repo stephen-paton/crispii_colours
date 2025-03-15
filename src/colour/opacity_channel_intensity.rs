@@ -1,6 +1,6 @@
 use crispii_errors::{CrispiiError, InvalidArgumentError};
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct OpacityChannelIntensity {
     intensity: u8,
 }

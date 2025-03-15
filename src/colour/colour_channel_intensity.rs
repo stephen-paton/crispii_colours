@@ -1,5 +1,5 @@
 /// A struct representing the intensity of a colour channel (RGBA) as a two digit hex value - from 00 to FF (inclusive)
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct ColourChannelIntensity {
     intensity: u8,    
 }

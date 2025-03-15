@@ -5,7 +5,7 @@ pub mod opacity_channel_intensity;
 pub use opacity_channel_intensity::OpacityChannelIntensity;
 
 /// A struct representing an RGBA colour
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Colour {
     r: ColourChannelIntensity,
     g: ColourChannelIntensity,
